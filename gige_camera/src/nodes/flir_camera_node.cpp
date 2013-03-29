@@ -41,7 +41,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <dynamic_reconfigure/server.h>
 #include <driver_base/SensorLevels.h>
-//#include "gige_camera/FlirConfig.h"
+#include <gige_camera/FlirConfig.h>
 
 
 double pix2temp(unsigned short pValue)
@@ -64,7 +64,7 @@ private:
     boost::scoped_ptr <gige::GigeCamera> cam_;
 
     // Dynamic Reconfigure
-    //dynamic_reconfigure::Server<gige_camera::FlirConfig> reconfig_svr_;
+    dynamic_reconfigure::Server<gige_camera::FlirConfig> reconfig_svr_;
 
 public:
     FLIRNode(const ros::NodeHandle& node_handle):
@@ -77,7 +77,7 @@ public:
         cam_->open();
         cam_->start();
         cam_->useImage = boost::bind(&FLIRNode::publishImage, this, _1);
-        //reconfig_svr_.setCallback(boost::bind(&FLIRNode::configCb, this, _1, _2));
+        reconfig_svr_.setCallback(boost::bind(&FLIRNode::configCb, this, _1, _2));
         ROS_INFO(" GigE camera start ====== ");
     }
 
@@ -99,7 +99,7 @@ public:
         pub_.publish(img_);
     }
 
-/*
+
     void configCb(gige_camera::FlirConfig &config, uint32_t level)
     {
         if (level >= (uint32_t)driver_base::SensorLevels::RECONFIGURE_STOP) cam_->stop();
@@ -110,7 +110,7 @@ public:
 
         if (level >= (uint32_t)driver_base::SensorLevels::RECONFIGURE_STOP) cam_->start();
     }
-*/
+
 };
 
 

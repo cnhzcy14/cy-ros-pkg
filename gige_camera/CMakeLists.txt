@@ -62,6 +62,10 @@ set(EBUS_LIB
 #  std_msgs
 #)
 
+generate_dynamic_reconfigure_options(
+    cfg/Flir.cfg
+)
+
 ###################################################
 ## Declare things to be passed to other projects ##
 ###################################################
@@ -103,6 +107,8 @@ add_executable(flir_camera_node
 #	${PROJECT_NAME}
 #	gige_camera_gencfg
 #)
+
+add_dependencies(flir_camera_node gige_camera_gencfg) 
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(flir_camera_node
